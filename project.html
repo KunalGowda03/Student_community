@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project </title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+
+    section {
+      max-width: 800px;
+      margin: 20px auto;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #project-form {
+      display: flex;
+      flex-direction: column;
+      padding:40px;
+    }
+
+    label {
+      margin-bottom: 8px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 40px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #project-list {
+      margin-top: 20px;
+    }
+
+   
+    #project-form p {
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Project Page</h1>
+  </header>
+
+  <section>
+    <form id="project-form">
+      <p>Introduce Your Project Idea</p>
+      <label for="projectName">Project Name:</label>
+      <input type="text" id="projectName" name="projectName" required>
+
+      <label for="projectDescription">Project Description:</label>
+      <textarea id="projectDescription" name="projectDescription" required></textarea>
+
+      <button type="button" onclick="window.location.href='http://localhost:8080/chat.html'">Join Project</button>
+
+    </form>
+
+    <div id="project-list"></div>
+  </section>
+
+  <script>
+    function submitProject() {
+      const projectName = document.getElementById('projectName').value;
+      const projectDescription = document.getElementById('projectDescription').value;
+
+      
+      if (projectName.trim() === '' || projectDescription.trim() === '') {
+        alert('Please fill in all fields.');
+        return;
+      }
+
+
+      const projectData = {
+        name: projectName,
+        description: projectDescription,
+      };
+
+   
+      displayProject(projectData);
+
+
+      document.getElementById('project-form').reset();
+    }
+
+    function displayProject(project) {
+      const projectList = document.getElementById('project-list');
+
+      const projectBox = document.createElement('div');
+      projectBox.className = 'project-box';
+      projectBox.innerHTML = `
+        <h3>${project.name}</h3>
+        <p>${project.description}</p>
+        <button onclick="joinProject('${project.name}')">Join Project</button>
+      `;
+
+      projectList.appendChild(projectBox);
+    }
+
+    function joinProject(projectName) {
+     
+      alert(`Joined project: ${projectName}`);
+    }
+  </script>
+
+</body>
+</html>

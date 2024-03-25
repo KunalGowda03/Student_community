@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore - Study Group</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url("logo_back.jpg") no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: lavender;
+      position: relative;
+    }
+
+    header {
+      background-color: black;
+      padding: 30px;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .upload-download-container,
+    .calendar-container,
+    .profile-display {
+      display: flex;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 20px;
+    }
+
+    .upload-container span,
+    .download-container i,
+    .calendar-container i,
+    .profile-display i {
+      margin-right: 5px;
+    }
+
+    .upload-container:hover,
+    .download-container:hover,
+    .calendar-container:hover,
+    .profile-display:hover {
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .small-box-container {
+      display: flex;
+      justify-content: space-around;
+      width: 80%;
+      
+      margin-top: 20px; /* Adjusted margin for small boxes */
+    }
+
+    .small-box {
+      width: 20%;
+      height: 70px;
+      margin: 10px;
+      padding: 10px;
+      box-sizing: border-box;
+      text-align: center;
+      background-color: black;
+      color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .box-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 80%;
+      margin-top: 20px; /* Adjusted margin to make space for the fixed header */
+    }
+
+    .box {
+      width: 30%;
+      height: 400px;
+      margin: 10px;
+      padding: 10px;
+      box-sizing: border-box;
+      text-align: center;
+      background-color: #54d248;
+      color: #080000;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .box:hover::after {
+      content: attr(data-title);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      display: none;
+      z-index: 1;
+    }
+
+    .box:hover::after {
+      display: block;
+    }
+
+    .box h2 {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 40px;
+    }
+
+    .domain-bg {
+      background-image: url('domain.jpg');
+      background-image: 300px 500px;
+    }
+
+    .projects-bg {
+      background-image: url('projjj.jpg');
+    }
+
+    .assignments-bg {
+      background-image: url('assignments1.jpg');
+      background-image: 300px 500px;
+    }
+
+    .profile-popup {
+      position: fixed;
+      top: 50px;
+      right: 20px;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #f8f3f3;
+      border-radius: 10px;
+      display: none;
+      z-index: 1;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 18px;
+      color: #fbfafa;
+      cursor: pointer;
+    }
+
+    .edit-btn,
+    .save-btn {
+      margin-top: 10px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="upload-download-container" onclick="redirectToPage('http://localhost:8080/upload.html')">
+      <span>Upload</span>
+      <i class="fas fa-upload profile-icon"></i>
+    </div>
+
+    <div class="download-container" onclick="redirectToPage('http://localhost:8080/upload.html')">
+      <i class="fas fa-download"></i>
+      Download
+    </div>
+
+    <div class="calendar-container" onclick="redirectToCalendar()">
+      <i class="far fa-calendar-alt"></i>
+      Calendar
+    </div>
+
+    <div class="profile-display" id="profileDisplay">
+      <i class="fas fa-user profile-icon" onclick="toggleProfileDisplay()"></i>
+    </div>
+  </header>
+
+  <div class="profile-popup" id="profilePopup">
+    <div class="close-btn" onclick="toggleProfileDisplay()">Close</div>
+    <h2>User Profile</h2>
+    <p id="username">Username: </p>
+    <p id="email">Email: </p>
+    <p id="department">Department: </p>
+    <p id="year">Year of Study: </p>
+    <div class="edit-btn" onclick="editProfile()">Edit</div>
+    <div class="save-btn" onclick="saveProfile()">Save</div>
+  </div>
+
+  <div class="small-box-container">
+    <div class="small-box">
+      <p>Domains</p>
+    </div>
+    <div class="small-box">
+      <p>Projects</p>
+    </div>
+    <div class="small-box">
+      <p>Assignments</p>
+    </div>
+  </div>
+
+  <div class="box-container">
+    <div class="box domain-bg" data-title="Domain" onclick="redirectToPage('http://localhost:8080/course.html')">
+    </div>
+    <div class="box projects-bg" data-title="Projects" onclick="redirectToPage('http://localhost:8080/project.html')">
+    </div>
+    <div class="box assignments-bg" data-title="Assignments" onclick="redirectToPage('http://localhost:8080/assignment.html')">
+    </div>
+  </div>
+
+  <script>
+    function redirectToPage(page) {
+      window.location.href = page;
+    }
+
+    function redirectToCalendar() {
+      window.location.href = "http://localhost:8080/index.html";
+    }
+
+    function toggleProfileDisplay() {
+      const profilePopup = document.getElementById('profilePopup');
+      profilePopup.style.display = profilePopup.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function editProfile() {
+      const newUsername = prompt("Enter your new username:");
+      const newEmail = prompt("Enter your new email:");
+      const newDepartment = prompt("Enter your department:");
+      const newYear = prompt("Enter your year of study:");
+
+      if (newUsername === null || newEmail === null || newDepartment === null || newYear === null) {
+        return;
+      }
+
+      const usernameElement = document.getElementById('username');
+      const emailElement = document.getElementById('email');
+      const departmentElement = document.getElementById('department');
+      const yearElement = document.getElementById('year');
+
+      usernameElement.textContent = `Username: ${newUsername}`;
+      emailElement.textContent = ` Email: ${newEmail}`;
+      departmentElement.textContent = ` Department: ${newDepartment}`;
+      yearElement.textContent = ` Year of Study: ${newYear}`;
+    }
+
+    function saveProfile() {
+      alert("Saving profile...");
+    }
+  </script>
+
+</body>
+</html>

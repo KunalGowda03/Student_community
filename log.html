@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log in - Study Group</title>
+  <style>
+
+body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: url("logo_back.png") no-repeat center center fixed;
+  background-size: cover;
+ 
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 60px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header img {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin: 0;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 50px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      margin: auto;
+      max-width: 900px;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input {
+      width: 100%;
+     
+      padding: 10px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: green;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: black;
+    }
+
+    .signUp-link {
+      margin-top: 15px;
+      color:green;
+    }
+   
+  </style>
+</head>
+<body>
+
+  <header>
+   <h1>Log in to link up with study communities</h1>
+ 
+  </header>
+
+  <form>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+   
+    <br><br>
+    <button type="submit" id="Login">Log in</button>
+  </form>
+
+  <p class="SignUp-link">Create account <a href="http://localhost:8080/sign.html">SignUp</a></p>
+
+  <script type="module">
+   
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
+    import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
+
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDxPjZ_Wl5FuEsOrgBqpfMgu-SRdbDcgsw",
+      authDomain: "login-with-firebase-8155f.firebaseapp.com",
+      projectId: "login-with-firebase-8155f",
+      storageBucket: "login-with-firebase-8155f.appspot.com",
+      messagingSenderId: "799121561932",
+      appId: "1:799121561932:web:261e037750fbfc17d657e9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+
+    const database = getDatabase(app);
+    const auth = getAuth();
+
+    const loginButton = document.getElementById('Login');
+    loginButton.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+
+          const dt = new Date();
+          update(ref(database, 'user/' + user.uid), {
+            last_login: dt,
+          });
+          alert('User logged in!');
+         
+
+          window.location.href = "http://localhost:8080/thirdpage.html";
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          alert(errorMessage);
+        });
+    });
+
+  </script>
+</body>
+</html>

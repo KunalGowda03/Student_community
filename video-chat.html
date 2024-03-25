@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Call App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    video {
+      max-width: 100%;
+      max-height: 100%;
+      border: 1px solid #ccc;
+    }
+
+    audio {
+      display: none; 
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <video id="localVideo" autoplay muted></video>
+  <video id="remoteVideo" autoplay></video>
+  <audio id="localAudio" autoplay muted></audio>
+  <audio id="remoteAudio" autoplay></audio>
+  <div>
+    <button id="toggle-mic" onclick="toggleMic()" aria-label="Toggle Microphone">
+      <i class="fas fa-microphone"></i>
+      Microphone
+    </button>
+    <button id="toggle-camera" onclick="toggleCamera()" aria-label="Toggle Camera">
+      <i class="fas fa-video"></i>
+      Toggle Camera
+    </button>
+    <button id="present-screen" onclick="presentScreen()" aria-label="Present Screen">
+      <i class="fas fa-desktop"></i>
+      Present Screen
+    </button>
+    <button id="stop-presenting" onclick="stopPresentingScreen()" aria-label="Stop Presentation">
+      <i class="fas fa-stop"></i>
+      Stop Presentation
+    </button>
+    <button id="end-call" onclick="endVideoChat()" aria-label="End Video Chat">
+      <i class="fas fa-phone-slash"></i>
+      End Video Chat
+    </button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script>
+ 
+    const configuration = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
+    const peerConnection = new RTCPeerConnection(configuration);
+    let localStream;
+    let screenStream;
+
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        localStream = stream;
+        const localVideo = document.getElementById('localVideo');
+        localVideo.srcObject = stream;
+
+        stream.getTracks().forEach((track) => {
+          peerConnection.addTrack(track, stream);
+        });
+
+        const localAudio = document.getElementById('localAudio');
+        localAudio.srcObject = stream;
+      })
+      .catch((error) => {
+        console.error('Error accessing media devices:', error);
+      });
+
+    peerConnection.ontrack = (event) => {
+      const remoteVideo = document.getElementById('remoteVideo');
+      remoteVideo.srcObject = event.streams[0];
+
+      const remoteAudio = document.getElementById('remoteAudio');
+      remoteAudio.srcObject = event.streams[0];
+
+     
+      const remoteAudioTracks = event.streams[0].getAudioTracks();
+      if (remoteAudioTracks.length > 0) {
+        remoteAudio.srcObject = new MediaStream([remoteAudioTracks[0]]);
+        remoteAudio.style.display = 'block';
+      }
+    };
+
+    function toggleMic() {
+      const audioTrack = localStream.getAudioTracks()[0];
+      audioTrack.enabled = !audioTrack.enabled;
+      console.log('Microphone ' + (audioTrack.enabled ? 'enabled' : 'disabled'));
+    }
+
+    function toggleCamera() {
+      const videoTrack = localStream.getVideoTracks()[0];
+      videoTrack.enabled = !videoTrack.enabled;
+      console.log('Camera ' + (videoTrack.enabled ? 'enabled' : 'disabled'));
+    }
+
+    async function presentScreen() {
+      try {
+        screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+        const localVideo = document.getElementById('localVideo');
+        localVideo.srcObject = screenStream;
+
+        screenStream.getTracks().forEach((track) => {
+          const senders = peerConnection.getSenders();
+          const videoSender = senders.find((s) => s.track.kind === 'video');
+          videoSender.replaceTrack(track);
+        });
+      } catch (error) {
+        console.error('Error presenting screen:', error);
+      }
+    }
+
+    function stopPresentingScreen() {
+      const localVideo = document.getElementById('localVideo');
+      localVideo.srcObject = localStream;
+
+      if (screenStream) {
+        screenStream.getTracks().forEach((track) => track.stop());
+        screenStream = null;
+      }
+    }
+
+    function endVideoChat() {
+     
+      peerConnection.close();
+
+      const localVideo = document.getElementById('localVideo');
+      localVideo.srcObject = null;
+
+      const localAudio = document.getElementById('localAudio');
+      localAudio.srcObject = null;
+
+      const remoteVideo = document.getElementById('remoteVideo');
+      remoteVideo.srcObject = null;
+
+      const remoteAudio = document.getElementById('remoteAudio');
+      remoteAudio.srcObject = null;
+
+      window.location.href = 'chat.html'; 
+    }
+  </script>
+</body>
+</html>

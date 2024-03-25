@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choose Year - Study Group</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url("logo_back.png") no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background-color: white;
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 80px; 
+    }
+
+    .options-heading {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: black;
+    }
+
+    .year-option {
+      background-color: green;
+      color: #fff;
+      padding: 20px;
+      margin: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 24px;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+    }
+
+    .year-option:hover {
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Choose current year of studying  </h1>
+  </header>
+
+  <div class="options-container">
+   
+    <div class="year-option" onclick="redirectToNextPage('1stYear')">1st Year</div>
+    <div class="year-option" onclick="redirectToNextPage('2ndYear')">2nd Year</div>
+    <div class="year-option" onclick="redirectToNextPage('3rdYear')">3rd Year</div>
+    <div class="year-option" onclick="redirectToNextPage('4thYear')">4th Year</div>
+  </div>
+
+  <script>
+    function redirectToNextPage(year) {
+      window.location.href = 'http://localhost:8080/department.html?year=' + encodeURIComponent(year);
+    }
+  </script>
+
+</body>
+</html>

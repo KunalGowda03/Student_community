@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #assignment-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #assignment-form label {
+            margin-bottom: 8px;
+        }
+
+        #assignment-form input,
+        #assignment-form textarea,
+        #assignment-form select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Assignment Page</h1>
+    </header>
+
+    <section id="discussion-section">
+        <h2>Assignment Discussion</h2>
+        <button type="button" onclick="window.location.href='http://localhost:8080/chat.html'">Assignment Discussion</button>
+
+    </section>
+
+    <section id="upload-section">
+        <h2>Assignment Submission</h2>
+        <form id="assignment-form" enctype="multipart/form-data">
+            <label for="assignmentName">Assignment Name:</label>
+            <input type="text" id="assignmentName" name="assignmentName" required>
+
+            <label for="assignmentFile">Upload Assignment File:</label>
+            <input type="file" id="assignmentFile" name="assignmentFile" accept=".doc, .docx, .pdf">
+
+            <button type="button" onclick="submitAssignment()">Submit Assignment</button>
+        </form>
+    </section>
+
+    <script>
+        function submitDiscussion() {
+           
+            alert('Discussion submitted!');
+        }
+
+        function submitAssignment() {
+           
+            alert('Assignment submitted!');
+        }
+    </script>
+
+</body>
+</html>

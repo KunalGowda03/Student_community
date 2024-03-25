@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore More - Study Group</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url("nogirl.png") no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      background-color: lavender;
+    }
+
+    header {
+      background-color: black;
+      padding: 20px;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between; 
+      transition: top 0.3s; 
+    }
+
+    header img {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin: 0;
+      color: #fff;
+    }
+
+    .search-container {
+      display: flex;
+      align-items: center; 
+      justify-content: center; 
+      flex-grow: 1; 
+    }
+
+    .search-box {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+
+    .search-button {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4caf50;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .box-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      align-items: center;
+      width: 80%;
+      margin: 80px auto 20px; /* Add top margin to create space for the search bar */
+    }
+
+    .box {
+      width: 40%;
+      height: 300px;
+      margin: 20px;
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
+      background-color: #6a5acd;
+      color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .box:hover {
+      transform: scale(1.05);
+    }
+
+    .box h2 {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .box:nth-child(1) {
+      background-image: url('dsa.png');
+      background-size: 500px 300px;
+      
+    }
+
+    .box:nth-child(2) {
+      background-image: url('web.jpg');
+      background-size: 500px 300px;
+    }
+
+    .box:nth-child(3) {
+      background-image: url('cyb.jpg');
+      background-size: 500px 300px;
+    }
+
+    .box:nth-child(4) {
+      background-image: url('ai.jpg');
+      background-size: 500px 300px;
+    }
+
+    .box:nth-child(5) {
+      background-image: url('python.png');
+      background-size: cover;
+    }
+
+    .box:nth-child(6) {
+      background-image: url('blockchain.jpg');
+      background-size: 500px 300px;
+    }
+
+    .box:nth-child(7) {
+      background-image: url('iot.jpg');
+      background-size: cover;
+      background-size: 500px 300px;
+    }
+
+    .box:nth-child(8) {
+      background-image: url('mech.jpg');
+      background-size: cover;
+    }
+
+    .search-result {
+      margin-top: 10px;
+    }
+
+    .pop-up {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background: #333;
+      color: #fff;
+      font-size: 24px;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>Study Sphere</h1> 
+    </div>
+    <div class="search-container">
+      <input type="text" class="search-box" placeholder="Search here..." id="searchBox">
+      <button class="search-button" onclick="searchCourses()">Search</button>
+    </div>
+  </header>
+
+  <div class="box-container">
+    <div class="box" onclick="redirectToPage('http://localhost:8080/chat.html')"></div>
+    <div class="box" onclick="redirectToPage('http://localhost:8080/chat.html')">
+      <h2>Web Development</h2>
+    </div>
+    <div class="box" onclick="redirectToPage('http://localhost:8080/chat.html')"></div>
+    <div class="box" onclick="redirectToPage('http://localhost:8080/chat.html')"></div>
+    <div class="box" onclick="redirectToPage('http://localhost:8080/chat.html')">
+   
+    </div>
+    <div class="box" onclick="redirectToPage('http://localhost:8080/chat.html')">
+   
+    </div>
+    <div class="box" onclick="redirectToPage('http://localhost:8080/chat.html')">
+      
+    </div>
+    <div class="box" onclick="redirectToPage('http://localhost:8080/chat.html')">
+      
+    </div>
+  </div>
+
+  <div class="search-result" id="searchResult"></div>
+
+  <div class="pop-up" id="popUp"></div>
+
+  <script>
+    let prevScrollpos = window.pageYOffset;
+
+    window.onscroll = function() {
+      let currentScrollPos = window.pageYOffset;
+      const header = document.querySelector("header");
+
+      if (prevScrollpos > currentScrollPos) {
+        header.style.top = "0";
+      } else {
+        header.style.top = "-80px"; 
+      }
+
+      prevScrollpos = currentScrollPos;
+    };
+
+    function redirectToPage(page) {
+      window.location.href = page;
+    }
+
+    function searchCourses() {
+      const searchBox = document.getElementById('searchBox');
+      const searchTerm = searchBox.value.toLowerCase();
+      const popUp = document.getElementById('popUp');
+
+      const validDomains = [
+        'web development',
+        'iot',
+        'data structures and algorithms',
+        'cyber security',
+        'artificial intelligence and machine learning',
+        'software engineering',
+        'programming languages',
+        'digital systems'
+      ];
+
+      if (validDomains.includes(searchTerm)) {
+        popUp.textContent = `Domain Found: ${searchTerm}`;
+        popUp.style.display = 'block';
+
+        setTimeout(() => {
+          popUp.style.display = 'none';
+        }, 3000);
+      } else {
+        popUp.textContent = `Domain not found: ${searchTerm}`;
+        popUp.style.display = 'block';
+      }
+    }
+  </script>
+
+</body>
+</html>

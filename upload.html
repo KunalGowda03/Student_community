@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url("logo_back.png") no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+          
+        }
+
+        header {
+            background-color: black;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        #content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        #uploadedFilesContainer {
+            margin-top: 20px;
+        }
+
+        .file-box {
+            border: 1px solid #707bbb;
+            padding: 10px;
+            margin: 10px;
+            text-align: center;
+            cursor: pointer;
+            min-width: 200px;
+            background-color: rgb(242, 242, 247);
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .file-box:hover {
+            background-color: #f0f0f0;
+        }
+
+        #uploadedFilesList {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        .file-link {
+            color: blue;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Study Materials</h1>
+    </header>
+
+    <div id="content-wrapper">
+        <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+            <label for="file">Choose a file:</label>
+            <input type="file" id="file" name="file" accept=".pdf, .doc, .docx, .png, .jpg">
+            <button type="submit">Upload</button>
+        </form>
+
+        <div id="file-container"></div>
+
+        <div id="uploadedFilesContainer">
+            <h2>Uploaded Files:</h2>
+            <ul id="uploadedFilesList"></ul>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+    
+            const formData = new FormData(this);
+    
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                fetchAndDisplayFiles();
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    
+        function fetchAndDisplayFiles() {
+            fetch('/files')
+                .then(response => response.json())
+                .then(files => {
+                    const uploadedFilesList = document.getElementById('uploadedFilesList');
+                    uploadedFilesList.innerHTML = '';
+    
+                    files.forEach(file => {
+                        const fileBox = document.createElement('div');
+                        fileBox.classList.add('file-box');
+                        fileBox.onclick = function() {
+                            window.open('/uploads/' + encodeURIComponent(file.filename), '_blank');
+                        };
+    
+                        const fileLink = document.createElement('a');
+                        fileLink.href = '/uploads/' + encodeURIComponent(file.filename);
+                        fileLink.target = '_blank';
+                        fileLink.classList.add('file-link');
+                        fileLink.textContent = file.filename;
+    
+                        fileBox.appendChild(fileLink);
+                        uploadedFilesList.appendChild(fileBox);
+                    });
+                })
+                .catch(error => console.error('Error retrieving files:', error));
+        }
+    
+        window.onload = fetchAndDisplayFiles;
+    </script>
+</body>
+</html>

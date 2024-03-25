@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engineering Department - Study Group</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url("logo_back.png") no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+     
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .department-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 80px;
+    }
+
+    .department-option {
+      background-color: green;
+      color: #fff;
+      padding: 20px;
+      margin: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 24px;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      width: 200px;
+      transition: background-color 0.3s;
+    }
+
+    .department-option:hover {
+      background-color:black;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Choose Your Engineering Department</h1>
+  </header>
+
+  <div class="department-container" id="departmentContainer">
+    <div class="department-option" onclick="redirectToDomain('CSE')">Computer Science and Engineering</div>
+    <div class="department-option" onclick="redirectToDomain('ISE')">Information Science and Engineering</div>
+    <div class="department-option" onclick="redirectToDomain('ECE')">Electronics and Communication Engineering</div>
+    <div class="department-option" onclick="redirectToDomain('EE')">Electrical Engineering</div>
+    <br>
+    <div class="department-option" onclick="redirectToDomain('CE')">Civil Engineering</div>
+    <div class="department-option" onclick="redirectToDomain('ME')">Mechanical Engineering</div>
+    <div class="department-option" onclick="redirectToDomain('AE')">Automobile Engineering</div>
+    <div class="department-option" onclick="redirectToDomain('IPE')">Industrial and Production Engineering</div>
+   
+  </div>
+
+  <script>
+    function redirectToDomain(department) {
+      
+      window.location.href = 'http://localhost:8080/domain.html?dept=' + encodeURIComponent(department);
+    }
+
+    
+    document.addEventListener('DOMContentLoaded', function () {
+      var departmentContainer = document.getElementById('departmentContainer');
+      var departmentOptions = departmentContainer.getElementsByClassName('department-option');
+      
+      for (var i = 4; i < departmentOptions.length; i += 5) {
+        departmentOptions[i].insertAdjacentHTML('beforebegin', '<br>');
+      }
+    });
+  </script>
+
+</body>
+</html>

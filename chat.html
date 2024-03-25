@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat</title>
+  <link rel="stylesheet" type="text/css" href="style1.css"> 
+</head>
+<body>
+  <h1>Chat</h1>
+  <form id="chat-form">
+    <input type="text" id="username" placeholder="Enter your username" required>
+    <input type="text" id="message" placeholder="Type a message" required>
+    <div class="button-container">
+      <div class="secondary-buttons">
+        
+        <button type="button" onclick="redirectToVideoChat()">Join Video Chat</button>
+      </div>
+      <button type="button" onclick="sendMessage()">Send</button>
+    </div>
+  </form>
+  <ul id="messages"></ul>
+
+  <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
+  <script>
+    const socket = io();
+
+    const chatForm = document.getElementById('chat-form');
+    const usernameInput = document.getElementById('username');
+    const messageInput = document.getElementById('message');
+    const messagesList = document.getElementById('messages');
+    const fileInput = document.getElementById('file-input');
+
+    chatForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      sendMessage();
+    });
+
+    function sendMessage() {
+      const username = usernameInput.value.trim();
+      const message = messageInput.value.trim();
+      if (username && message) {
+        socket.emit('chat message', { username, message });
+        messageInput.value = '';
+      }
+    }
+
+    socket.on('chat message', (msg) => {
+      const li = document.createElement('li');
+      li.textContent = `${msg.username}: ${msg.message}`;
+      messagesList.appendChild(li);
+    });
+
+    function redirectToVideoChat() {
+      window.location.href = 'video-chat.html';
+    }
+
+    function sendFile() {
+      const file = fileInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const fileData = e.target.result;
+          const fileName = file.name;
+          socket.emit('file shared', { fileName, fileData });
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  </script>
+</body>
+</html>
